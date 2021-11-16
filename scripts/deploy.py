@@ -1,11 +1,15 @@
-from brownie import accounts, config
+from brownie import accounts, SimpleStorage
 
 
 def deploy_simple_storage():
-    # Uses the first account in the list of 10 accounts automatically created by brownie
-    # account = accounts[0]
-    account = accounts.add(config["wallets"]["from_key"])
-    print(account)
+    account = accounts[0]
+    simple_storage = SimpleStorage.deploy({"from": account})
+    stored_value = simple_storage.retrieve()
+    print(stored_value)
+    transaction = simple_storage.store(15, {"from": account})
+    transaction.wait(1)
+    updated_stored_value = simple_storage.retrieve()
+    print(updated_stored_value)
 
 
 def main():
